@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ALL Counselling</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: white;
+      text-align: center;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 20px;
+      padding: 20px 40px;
+      border-radius: 15px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .btech {
+      background-color: rgba(0, 255, 255, 0.2);
+      color: aquamarine;
+      border: 2px solid aquamarine;
+    }
+
+    .btech:hover {
+      background-color: aquamarine;
+      color: black;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px aquamarine;
+    }
+
+    .med {
+      background-color: rgba(173, 255, 47, 0.2);
+      color: red;
+      border: 2px solid red;
+    }
+
+    .med:hover {
+      background-color: red;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px red;
+    }
+
+    .comm {
+      background-color: rgba(173, 255, 47, 0.2);
+      color: blue;
+      border: 2px solid green;
+    }
+
+    .comm:hover {
+      background-color: green;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px green;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 18px;
+        padding: 15px 25px;
+      }
+
+      .logo {
+        width: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Optional Logo -->
+  <img src="favicon.png" alt="Site Logo" class="logo" />
+
+  <a href="Btech.html"><h1 class="btech">Click here for BTech Counselling</h1></a>
+  <a href="Medical.html"><h1 class="med">Click here for Medical Counselling</h1></a>
+  <a href="Commerse.html"><h1 class="comm">Click here for Commerse Counselling</h1></a>
+
+</body>
+</html>
