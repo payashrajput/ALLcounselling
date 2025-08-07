@@ -2,174 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login & Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Counselling - Login & Signup</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #000;
       margin: 0;
-      padding: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      color: white;
+      overflow: hidden;
     }
+
     .container {
-      background: #111;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s ease-in-out;
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0, 123, 255, 0.1);
+      width: 320px;
+      position: relative;
+      animation: fadeIn 1s ease forwards;
     }
-    .container:hover {
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #2c2c2c;
+      color: white;
+      transition: 0.3s;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    input:focus,
+    input:hover {
+      border-color: #007bff;
+      box-shadow: 0 0 8px #007bff55;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
       transform: scale(1.03);
     }
-    input, button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-    }
-    input {
-      background: #222;
-      color: white;
-    }
-    button {
-      background: #3f51b5;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #5c6bc0;
-    }
-    .switch {
+
+    .toggle {
       text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
-      color: #bbb;
+      margin-top: 15px;
     }
-    #recaptcha-container {
-      margin-top: 10px;
+
+    .toggle a {
+      color: #00aaff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .toggle a:hover {
+      color: white;
+      text-shadow: 0 0 5px #00aaff;
+      text-decoration: underline;
+    }
+
+    .form-section {
+      transition: all 0.5s ease;
+      opacity: 1;
+    }
+
+    .form-section.hidden {
+      opacity: 0;
+      transform: translateX(100%);
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .form-section.show {
+      opacity: 1;
+      transform: translateX(0);
+      position: relative;
+      pointer-events: auto;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <h2 id="form-title">Login</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button id="login-btn">Login</button>
-    <button id="signup-btn" style="display:none">Sign Up</button>
-    <button onclick="loginWithGoogle()">Login with Google</button>
-    <input type="tel" id="phone" placeholder="Phone Number (e.g., +91XXXXXXXXXX)" />
-    <div id="recaptcha-container"></div>
-    <button onclick="sendOTP()">Send OTP</button>
-    <input type="text" id="otp" placeholder="Enter OTP" />
-    <button onclick="verifyOTP()">Verify OTP</button>
-    <div class="switch" onclick="toggleForm()">Don't have an account? Sign Up</div>
+    <!-- Login Form -->
+    <div id="loginForm" class="form-section show">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <div class="toggle">Don't have an account? <a onclick="switchToSignup()">Signup</a></div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="form-section hidden">
+      <h2>Signup</h2>
+      <input type="email" id="signupEmail" placeholder="Email" />
+      <input type="password" id="signupPassword" placeholder="Password" />
+      <button onclick="signup()">Signup</button>
+      <div class="toggle">Already have an account? <a onclick="switchToLogin()">Login</a></div>
+    </div>
   </div>
 
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
   <script>
+    // ✅ Your Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCpMwWt5vc6REwvCAeRA9sfnwEtrYgWUJw",
       authDomain: "all-counselling-2025.firebaseapp.com",
       projectId: "all-counselling-2025",
-      storageBucket: "all-counselling-2025.appspot.com",
+      storageBucket: "all-counselling-2025.firebasestorage.app",
       messagingSenderId: "686943950536",
       appId: "1:686943950536:web:d38d30a092d111e8fa77fd",
       measurementId: "G-GNEV5Z3RT4"
     };
 
+    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    const loginBtn = document.getElementById("login-btn");
-    const signupBtn = document.getElementById("signup-btn");
-    const switchText = document.querySelector(".switch");
-    const formTitle = document.getElementById("form-title");
-
-    let isLogin = true;
-
-    function toggleForm() {
-      isLogin = !isLogin;
-      formTitle.innerText = isLogin ? "Login" : "Sign Up";
-      loginBtn.style.display = isLogin ? "block" : "none";
-      signupBtn.style.display = isLogin ? "none" : "block";
-      switchText.innerText = isLogin
-        ? "Don't have an account? Sign Up"
-        : "Already have an account? Login";
+    function switchToSignup() {
+      document.getElementById('loginForm').classList.remove('show');
+      document.getElementById('loginForm').classList.add('hidden');
+      setTimeout(() => {
+        document.getElementById('signupForm').classList.remove('hidden');
+        document.getElementById('signupForm').classList.add('show');
+      }, 200);
     }
 
-    signupBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Signup successful");
-          window.location.href = "index1.html";
-        })
-        .catch((error) => alert(error.message));
-    });
-
-    loginBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Login successful");
-          window.location.href = "index1.html";
-        })
-        .catch((error) => alert(error.message));
-    });
-
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => {
-          alert("Google login successful");
-          window.location.href = "index1.html";
-        })
-        .catch((error) => alert(error.message));
+    function switchToLogin() {
+      document.getElementById('signupForm').classList.remove('show');
+      document.getElementById('signupForm').classList.add('hidden');
+      setTimeout(() => {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('loginForm').classList.add('show');
+      }, 200);
     }
 
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-      'size': 'normal',
-      'callback': function(response) {
-        console.log("reCAPTCHA solved");
-      }
-    });
+    function signup() {
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
 
-    let confirmationResult;
-    function sendOTP() {
-      const phoneNumber = document.getElementById("phone").value;
-      const appVerifier = window.recaptchaVerifier;
-
-      auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((result) => {
-          confirmationResult = result;
-          alert("OTP sent");
-        })
-        .catch((error) => alert(error.message));
-    }
-
-    function verifyOTP() {
-      const code = document.getElementById("otp").value;
-      if (!confirmationResult) {
-        alert("Please request OTP first");
+      if (!email || !password) {
+        alert("Please enter email and password.");
         return;
       }
-      confirmationResult.confirm(code)
+
+      auth.createUserWithEmailAndPassword(email, password)
         .then(() => {
-          alert("Phone verification successful");
-          window.location.href = "index1.html";
+          alert("Signup successful! Please login.");
+          switchToLogin();
         })
-        .catch((error) => alert("Invalid OTP"));
+        .catch(error => {
+          alert("Signup Error: " + error.message);
+        });
+    }
+
+    function login() {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "index1.html"; // Redirect on successful login
+        })
+        .catch(error => {
+          alert("Login Error: " + error.message);
+        });
     }
   </script>
+
 </body>
 </html>
