@@ -19,7 +19,8 @@
       min-height: 100vh;
       color: white;
       text-align: center;
-      transition: opacity 0.5s ease; /* for fade effect */
+      transition: opacity 0.5s ease; /* fade effect */
+      opacity: 1; /* default visible */
     }
 
     .logo {
@@ -100,6 +101,12 @@
   <a href="Commerse.html" class="btn comm">Click here for Commerse Counselling</a>
 
   <script>
+    // Reset opacity when page is loaded or shown from cache
+    window.addEventListener("pageshow", () => {
+      document.body.style.opacity = "1";
+    });
+
+    // Smooth fade-out navigation
     document.querySelectorAll(".btn").forEach(button => {
       button.addEventListener("click", function (event) {
         event.preventDefault(); // stop navigation instantly
