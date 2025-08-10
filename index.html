@@ -90,6 +90,13 @@
       transform: scale(1.03);
     }
 
+    /* ✅ Added Click Glow Effect */
+    button.clicked {
+      border: 3px solid #00ffea;
+      box-shadow: 0 0 15px #00ffea;
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+    }
+
     .toggle {
       text-align: center;
       margin-top: 15px;
@@ -136,7 +143,7 @@
       <h2>Login</h2>
       <input type="email" id="loginEmail" placeholder="Email" />
       <input type="password" id="loginPassword" placeholder="Password" />
-      <button onclick="login()">Login</button>
+      <button id="loginBtn">Login</button>
       <div class="toggle">Don't have an account? <a onclick="switchToSignup()">Signup</a></div>
     </div>
 
@@ -155,7 +162,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
   <script>
-    // ✅ Your Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCpMwWt5vc6REwvCAeRA9sfnwEtrYgWUJw",
       authDomain: "all-counselling-2025.firebaseapp.com",
@@ -166,7 +172,6 @@
       measurementId: "G-GNEV5Z3RT4"
     };
 
-    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
@@ -207,18 +212,22 @@
         });
     }
 
-    function login() {
+    // ✅ Added glow before navigation
+    document.getElementById("loginBtn").addEventListener("click", function () {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
 
       auth.signInWithEmailAndPassword(email, password)
         .then(() => {
-          window.location.href = "index1.html"; // Redirect on successful login
+          this.classList.add("clicked"); // Add glow
+          setTimeout(() => {
+            window.location.href = "index1.html";
+          }, 200); // Delay navigation
         })
         .catch(error => {
           alert("Login Error: " + error.message);
         });
-    }
+    });
   </script>
 
 </body>
