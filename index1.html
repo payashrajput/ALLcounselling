@@ -19,24 +19,28 @@
       min-height: 100vh;
       color: white;
       text-align: center;
+      transition: opacity 0.5s ease; /* for fade effect */
     }
 
     .logo {
       width: 100px;
-      height: auto;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
       margin-bottom: 20px;
+      border: 3px solid white;
     }
 
-    h1 {
+    .btn {
+      display: inline-block;
       margin: 20px;
       padding: 20px 40px;
       border-radius: 15px;
       transition: all 0.3s ease-in-out;
       cursor: pointer;
-    }
-
-    a {
       text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     .btech {
@@ -44,7 +48,6 @@
       color: aquamarine;
       border: 2px solid aquamarine;
     }
-
     .btech:hover {
       background-color: aquamarine;
       color: black;
@@ -57,7 +60,6 @@
       color: red;
       border: 2px solid red;
     }
-
     .med:hover {
       background-color: red;
       color: white;
@@ -70,7 +72,6 @@
       color: blue;
       border: 2px solid green;
     }
-
     .comm:hover {
       background-color: green;
       color: white;
@@ -79,25 +80,40 @@
     }
 
     @media (max-width: 600px) {
-      h1 {
-        font-size: 18px;
+      .btn {
+        font-size: 16px;
         padding: 15px 25px;
       }
-
       .logo {
         width: 70px;
+        height: 70px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Optional Logo -->
   <img src="favicon.png" alt="Site Logo" class="logo" />
 
-  <a href="Btech.html"><h1 class="btech">Click here for BTech Counselling</h1></a>
-  <a href="Medical.html"><h1 class="med">Click here for Medical Counselling</h1></a>
-  <a href="Commerse.html"><h1 class="comm">Click here for Commerse Counselling</h1></a>
+  <a href="Btech.html" class="btn btech">Click here for BTech Counselling</a>
+  <a href="Medical.html" class="btn med">Click here for Medical Counselling</a>
+  <a href="Commerse.html" class="btn comm">Click here for Commerse Counselling</a>
 
+  <script>
+    document.querySelectorAll(".btn").forEach(button => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault(); // stop navigation instantly
+        const link = this.getAttribute("href");
+
+        // fade out page
+        document.body.style.opacity = "0";
+
+        // after fade animation, navigate
+        setTimeout(() => {
+          window.location.href = link;
+        }, 500); // match CSS transition duration
+      });
+    });
+  </script>
 </body>
 </html>
